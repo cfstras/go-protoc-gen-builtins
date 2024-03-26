@@ -13,7 +13,7 @@ import (
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 	wzsys "github.com/tetratelabs/wazero/sys"
 
-	"github.com/wasilibs/go-protoc-gen-builtins/internal/wasix_32v1"
+	"github.com/cfstras/go-protoc-gen-builtins/internal/wasix_32v1"
 )
 
 func Run(name string, wasm []byte) {

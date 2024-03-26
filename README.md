@@ -13,11 +13,11 @@ already built-in to `protoc`.
 
 ## Installation
 
-Precompiled binaries are available in the [releases](https://github.com/wasilibs/go-protoc-gen-builtins/releases).
+Precompiled binaries are available in the [releases](https://github.com/cfstras/go-protoc-gen-builtins/releases).
 Alternatively, install the plugin you want using `go install`.
 
 ```bash
-$ go install github.com/wasilibs/go-protoc-gen-builtins/cmd/protoc-gen-python@latest
+$ go install github.com/cfstras/go-protoc-gen-builtins/cmd/protoc-gen-python@latest
 ```
 
 As long as `$GOPATH/bin`, e.g. `~/go/bin` is on the `PATH`, `buf` should find it automatically.
@@ -36,7 +36,7 @@ version: v1
 plugins:
   - plugin: python
     out: out/python
-    path: [ "go", "run", "github.com/wasilibs/go-protoc-gen-builtins/cmd/protoc-gen-python@latest" ]
+    path: [ "go", "run", "github.com/cfstras/go-protoc-gen-builtins/cmd/protoc-gen-python@latest" ]
 ```
 
 If invoking `buf` itself with `go run`, it is possible to have full protobuf generation with no
@@ -57,7 +57,7 @@ it making it slower, but subsequent invocations should be quite fast.
 
 [3]: https://buf.build/
 
-[4]: https://github.com/wasilibs/go-protoc-gen-builtins-gen-grpc
+[4]: https://github.com/cfstras/go-protoc-gen-builtins-gen-grpc
 
 ## Generating for a different version
 

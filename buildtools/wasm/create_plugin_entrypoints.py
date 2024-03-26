@@ -1,27 +1,27 @@
 plugins = [
     {
         "name": "cpp",
-        "include": "google/protobuf/compiler/cpp/generator.h",    
+        "include": "google/protobuf/compiler/cpp/cpp_generator.h",
         "generator": "::google::protobuf::compiler::cpp::CppGenerator",
     },
     {
         "name": "csharp",
-        "include": "google/protobuf/compiler/csharp/csharp_generator.h",    
+        "include": "google/protobuf/compiler/csharp/csharp_generator.h",
         "generator": "::google::protobuf::compiler::csharp::Generator",
     },
     {
         "name": "java",
-        "include": "google/protobuf/compiler/java/generator.h",
+        "include": "google/protobuf/compiler/java/java_generator.h",
         "generator": "::google::protobuf::compiler::java::JavaGenerator",
     },
-    {
-        "name": "kotlin",
-        "include": "google/protobuf/compiler/java/kotlin_generator.h",
-        "generator": "::google::protobuf::compiler::java::KotlinGenerator",
-    },
+#     {
+#         "name": "kotlin",
+#         "include": "google/protobuf/compiler/java/kotlin_generator.h",
+#         "generator": "::google::protobuf::compiler::java::KotlinGenerator",
+#     },
     {
         "name": "objc",
-        "include": "google/protobuf/compiler/objectivec/generator.h",
+        "include": "google/protobuf/compiler/objectivec/objectivec_generator.h",
         "generator": "::google::protobuf::compiler::objectivec::ObjectiveCGenerator",
     },
     {
@@ -31,24 +31,24 @@ plugins = [
     },
     {
         "name": "python",
-        "include": "google/protobuf/compiler/python/generator.h",
+        "include": "google/protobuf/compiler/python/python_generator.h",
         "generator": "::google::protobuf::compiler::python::Generator",
     },
-    {
-        "name": "pyi",
-        "include": "google/protobuf/compiler/python/pyi_generator.h",
-        "generator": "::google::protobuf::compiler::python::PyiGenerator",
-    },
+#     {
+#         "name": "pyi",
+#         "include": "google/protobuf/compiler/python/pyi_generator.h",
+#         "generator": "::google::protobuf::compiler::python::PyiGenerator",
+#     },
     {
         "name": "ruby",
         "include": "google/protobuf/compiler/ruby/ruby_generator.h",
         "generator": "::google::protobuf::compiler::ruby::Generator",
     },
-    {
-        "name": "rust",
-        "include": "google/protobuf/compiler/rust/generator.h",
-        "generator": "::google::protobuf::compiler::rust::RustGenerator",
-    },
+#     {
+#         "name": "rust",
+#         "include": "google/protobuf/compiler/rust/rust_generator.h",
+#         "generator": "::google::protobuf::compiler::rust::RustGenerator",
+#     },
 ]
 
 with open('main.cc', 'r') as maincc:
@@ -65,7 +65,7 @@ for plugin in plugins:
     cmake_addition += f"""
 
     
-set(protoc-gen-{plugin['name']}_files ${{protobuf_SOURCE_DIR}}/src/main_{plugin['name']}.cc)
+set(protoc-gen-{plugin['name']}_files ${{protobuf_source_dir}}/src/main_{plugin['name']}.cc)
 add_executable(protoc-gen-{plugin['name']} ${{protoc-gen-{plugin['name']}_files}} ${{protobuf_version_rc_file}})
 target_link_libraries(protoc-gen-{plugin['name']} libprotoc libprotobuf ${{protobuf_ABSL_USED_TARGETS}})
 set_target_properties(protoc-gen-{plugin['name']} PROPERTIES VERSION ${{protobuf_VERSION}})
@@ -74,5 +74,5 @@ add_dependencies(plugins protoc-gen-{plugin['name']})
     
 print(cmake_addition)
 
-with open('CMakeLists.txt', 'a') as cmakelists:
+with open('cmake/CMakeLists.txt', 'a') as cmakelists:
     cmakelists.write(cmake_addition)

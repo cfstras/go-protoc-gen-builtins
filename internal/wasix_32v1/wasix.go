@@ -79,8 +79,12 @@ func exportFunctions(builder wazero.HostModuleBuilder) {
 		Export("callback_signal")
 
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(fdDupFn, []api.ValueType{i32, i32}, []api.ValueType{i32}).
+		WithGoModuleFunction(notSupported("fd_dup"), []api.ValueType{i32, i32}, []api.ValueType{i32}).
 		Export("fd_dup")
+
+	builder.NewFunctionBuilder().
+		WithGoModuleFunction(notSupported("fd_pipe"), []api.ValueType{i32, i32}, []api.ValueType{i32}).
+		Export("fd_pipe")
 
 	builder.NewFunctionBuilder().
 		WithGoModuleFunction(futexWaitFn, []api.ValueType{i32, i32, i32, i32}, []api.ValueType{i32}).
@@ -99,12 +103,26 @@ func exportFunctions(builder wazero.HostModuleBuilder) {
 		Export("thread_exit")
 
 	builder.NewFunctionBuilder().
+		WithGoModuleFunction(notSupported("thread_id"), []api.ValueType{i32}, []api.ValueType{i32}).
+		Export("thread_id")
+
+	builder.NewFunctionBuilder().
 		WithGoModuleFunction(threadParallelismFn, []api.ValueType{i32}, []api.ValueType{i32}).
 		Export("thread_parallelism")
 
 	builder.NewFunctionBuilder().
 		WithGoModuleFunction(threadSignalFn, []api.ValueType{i32, i32}, []api.ValueType{i32}).
 		Export("thread_signal")
+
+	builder.NewFunctionBuilder().
+		WithGoModuleFunction(notSupported("proc_fork"), []api.ValueType{i32, i32}, []api.ValueType{i32}).
+		Export("proc_fork")
+	builder.NewFunctionBuilder().
+		WithGoModuleFunction(notSupported("proc_exec"), []api.ValueType{i32, i32, i32, i32}, []api.ValueType{}).
+		Export("proc_exec")
+	builder.NewFunctionBuilder().
+		WithGoModuleFunction(notSupported("proc_join"), []api.ValueType{i32, i32, i32}, []api.ValueType{i32}).
+		Export("proc_join")
 }
 
 var callbackSignalFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, stack []uint64) {
@@ -113,10 +131,12 @@ var callbackSignalFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, st
 	stack[0] = 0
 })
 
-var fdDupFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
-	// We do not support child plugins so never call this.
-	panic("fd_dup")
-})
+func notSupported(message string) api.GoModuleFunc {
+	return api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
+		// We do not support child plugins so never call this.
+		panic(message)
+	})
+}
 
 var futexWaitFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
 	// We do not execute the wasm module concurrently so know this is never called.

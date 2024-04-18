@@ -2,6 +2,9 @@ package wasm
 
 import _ "embed"
 
+//go:embed protoc.wasm
+var Protoc []byte
+
 //go:embed protoc-gen-cpp.wasm
 var ProtocGenCpp []byte
 

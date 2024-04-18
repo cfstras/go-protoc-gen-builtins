@@ -20,9 +20,9 @@ RUN mkdir -p cmake/src && python3 create_plugin_entrypoints.py
 WORKDIR /workspace/cmake
 
 RUN cmake . -B build -Dprotobuf_BUILD_TESTS=OFF
-RUN cmake --build build --target plugins -j$(nproc)
+RUN cmake --build build --target plugins --target protoc -j$(nproc)
 
 SHELL ["/bin/bash", "-c"]
-RUN for f in build/protoc-gen-*[^0-9]; do wasm-opt -o "$f".wasm --low-memory-unused --flatten --rereloop --converge -O3 "$f"; done
+RUN for f in build/protoc-gen-*[^0-9] build/protoc; do wasm-opt -o "$f".wasm --low-memory-unused --flatten --rereloop --converge -O3 "$f"; done
 
-CMD ["bash", "-c", "cp build/protoc-gen-*.wasm /out/"]
+CMD ["bash", "-c", "cp build/*.wasm /out/"]

@@ -87,19 +87,19 @@ func exportFunctions(builder wazero.HostModuleBuilder) {
 		Export("fd_pipe")
 
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(futexWaitFn, []api.ValueType{i32, i32, i32, i32}, []api.ValueType{i32}).
+		WithGoModuleFunction(notSupported("futex_wait"), []api.ValueType{i32, i32, i32, i32}, []api.ValueType{i32}).
 		Export("futex_wait")
 
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(futexWakeFn, []api.ValueType{i32, i32}, []api.ValueType{i32}).
+		WithGoModuleFunction(notSupported("futex_wake"), []api.ValueType{i32, i32}, []api.ValueType{i32}).
 		Export("futex_wake")
 
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(futexWakeAllFn, []api.ValueType{i32, i32}, []api.ValueType{i32}).
+		WithGoModuleFunction(notSupported("futex_wake_all"), []api.ValueType{i32, i32}, []api.ValueType{i32}).
 		Export("futex_wake_all")
 
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(threadExitFn, []api.ValueType{i32}, []api.ValueType{}).
+		WithGoModuleFunction(notSupported("thread_exit"), []api.ValueType{i32}, []api.ValueType{}).
 		Export("thread_exit")
 
 	builder.NewFunctionBuilder().
@@ -137,26 +137,6 @@ func notSupported(message string) api.GoModuleFunc {
 		panic(message)
 	})
 }
-
-var futexWaitFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
-	// We do not execute the wasm module concurrently so know this is never called.
-	panic("futex_wait")
-})
-
-var futexWakeFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
-	// We do not execute the wasm module concurrently so know this is never called.
-	panic("futex_wake")
-})
-
-var futexWakeAllFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
-	// We do not execute the wasm module concurrently so know this is never called.
-	panic("futex_wake_all")
-})
-
-var threadExitFn = api.GoModuleFunc(func(_ context.Context, _ api.Module, _ []uint64) {
-	// We do not execute the wasm module concurrently so know this is never called.
-	panic("thread_exit")
-})
 
 var threadParallelismFn = api.GoModuleFunc(func(_ context.Context, m api.Module, stack []uint64) {
 	// We do not execute the wasm module concurrently so force this to 1, as if 1 CPU.

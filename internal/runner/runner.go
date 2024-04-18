@@ -31,6 +31,7 @@ func Run(name string, wasm []byte) {
 		WithSysNanosleep().
 		WithSysNanotime().
 		WithSysWalltime().
+		WithFSConfig(wazero.NewFSConfig().WithDirMount("/", "/")).
 		WithStderr(os.Stderr).
 		WithStdout(os.Stdout).
 		WithStdin(os.Stdin).
